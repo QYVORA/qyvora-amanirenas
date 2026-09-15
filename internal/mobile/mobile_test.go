@@ -120,7 +120,7 @@ func TestValidate(t *testing.T) {
 func TestSecretsCarryOnlyFingerprints(t *testing.T) {
 	p := mobile.Simulate(mobile.SimulationOptions{})
 	for _, a := range mobile.HardcodedSecrets(p) {
-		if !strings.HasPrefix(a.Fingerprint, "sha256:") {
+		if !strings.HasPrefix(a.Fingerprint, "fnv1a:") {
 			t.Errorf("secret artifact %s missing fingerprint", a.ID)
 		}
 		if strings.Contains(a.Detail, "=") && strings.Contains(a.Detail, "0123SK") {

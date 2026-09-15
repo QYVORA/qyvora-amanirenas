@@ -132,11 +132,19 @@ type RiskProfile struct {
 
 // Load parses a profile from r, rejecting documents that do not declare the
 // profile schema.
+// maxInputBytes bounds accepted input size so malformed or hostile documents
+// cannot exhaust available memory during decode.
+const maxInputBytes = 64 << 20 // 64 MiB
+
 func Load(r io.Reader) (*Profile, error) {
 	var p Profile
-	dec := json.NewDecoder(r)
+	lr := io.LimitReader(r, maxInputBytes+1)
+	dec := json.NewDecoder(lr)
 	if err := dec.Decode(&p); err != nil {
 		return nil, fmt.Errorf("parsing profile: %w", err)
+	}
+	if n, _ := io.Copy(io.Discard, lr); n > 0 {
+		return nil, fmt.Errorf("profile exceeds maximum supported input size (%d bytes)", maxInputBytes)
 	}
 	if p.Schema != SchemaVersion {
 		return nil, fmt.Errorf("unsupported profile schema %q (want %s)", p.Schema, SchemaVersion)
@@ -155,6 +163,13 @@ func LoadFile(path string) (*Profile, error) {
 		return nil, err
 	}
 	defer func() { _ = f.Close() }()
+	fi, serr := f.Stat()
+	if serr != nil {
+		return nil, fmt.Errorf("stat %s: %w", path, serr)
+	}
+	if fi.Size() > maxInputBytes {
+		return nil, fmt.Errorf("%s exceeds maximum supported input size (%d bytes)", path, maxInputBytes)
+	}
 	return Load(f)
 }
 
@@ -173,9 +188,9 @@ func normalize(p *Profile) {
 
 func placeholderHash(s string) string {
 	if s == "" {
-		return "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+		return "fnv1a:0000000000000000000000000000000000000000000000000000000000000000"
 	}
-	return "sha256:" + shorthash(s)
+	return "fnv1a:" + shorthash(s)
 }
 
 func shorthash(s string) string {

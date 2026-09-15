@@ -31,11 +31,14 @@ func InsecureTransport(p *Profile) []APIEndpoint {
 	return out
 }
 
-// MissingPinning returns TLS endpoints that do not pin certificates.
+// MissingPinning returns TLS endpoints carrying authenticated traffic that do
+// not pin certificates. Only endpoints using auth binding (bearer/basic) are
+// considered sensitive enough to require pinning, and every discovery method
+// (static or discovered later) is in scope.
 func MissingPinning(p *Profile) []APIEndpoint {
 	var out []APIEndpoint
 	for _, e := range p.APIEndpoints {
-		if e.Scheme == "https" && !e.Pinned && strings.Contains(e.Discovered, "static") {
+		if e.Scheme == "https" && !e.Pinned && e.Auth != "" && !strings.EqualFold(e.Auth, "none") {
 			out = append(out, e)
 		}
 	}
@@ -118,16 +121,64 @@ func SensitivePermissions(p *Profile) []Permission {
 	return out
 }
 
-// LowMinimumOS reports profiles supporting old OS versions lacking modern
-// platform security features.
+// MinOSMajorThreshold is the oldest supported major OS version considered to
+// carry modern platform security controls; majors strictly below are flagged.
+const MinOSMajorThreshold = 15
+
+// LowMinimumOS reports profiles supporting OS versions that lack current
+// platform security features. The major version is parsed numerically from
+// the declared string ("12.1", "iOS 13.0.1"), so "1.x" prefixes of any major
+// like 10/11/12/13 no longer mis-evaluate as one.
 func LowMinimumOS(p *Profile) bool {
-	return p.MinOS != "" && strings.HasPrefix(p.MinOS, "1")
+	major, ok := parseMajorVersion(p.MinOS)
+	if !ok {
+		return false
+	}
+	return major < MinOSMajorThreshold
 }
 
-// AdHocSigning reports profiles not distributed through a verified App Store
-// channel.
+// parseMajorVersion extracts the leading numeric major from version strings.
+func parseMajorVersion(s string) (int, bool) {
+	start := -1
+	for i := 0; i < len(s); i++ {
+		if s[i] >= '0' && s[i] <= '9' {
+			start = i
+			break
+		}
+	}
+	if start < 0 {
+		return 0, false
+	}
+	end := start
+	for end < len(s) && s[end] >= '0' && s[end] <= '9' {
+		end++
+	}
+	major := 0
+	for i := start; i < end; i++ {
+		major = major*10 + int(s[i]-'0')
+	}
+	return major, true
+}
+
+// AdHocSigning reports profiles whose signing indicates an unverified ad-hoc
+// or development distribution channel. Only explicit markers are treated as
+// ad-hoc; unknown signature strings are not asserted one way or the other.
 func AdHocSigning(p *Profile) bool {
-	return p.Signature != "" && p.Signature != "app-store" && p.Signature != "enterprise"
+	if p.Signature == "" {
+		return false
+	}
+	s := strings.ToLower(strings.TrimSpace(p.Signature))
+	for _, verified := range []string{"app-store", "appstore", "store", "enterprise", "testflight"} {
+		if strings.Contains(s, verified) {
+			return false
+		}
+	}
+	for _, adhoc := range []string{"ad-hoc", "adhoc", "ad hoc", "development", "simulator"} {
+		if strings.Contains(s, adhoc) {
+			return true
+		}
+	}
+	return false
 }
 
 // MissingJailbreakDetection reports armed-surface when the app carries no

@@ -326,12 +326,16 @@ func (r *adhocSigning) Run(_ context.Context, envAny any, sink *rules.Sink) erro
 type missingTamper struct{}
 
 func (r *missingTamper) Meta() rules.Meta {
-	return metadata("AMN-012", "No jailbreak or tamper detection", "armoring",
+	m := metadata("AMN-012", "No jailbreak or tamper detection", "armoring",
 		"The app ships no jailbreak or tamper-detection capability, so payment and "+
 			"identity surfaces run unarmed on modified devices.",
 		"Add jailbreak detection with a fail-closed policy for sensitive flows, or "+
 			"document the accepted risk.",
 		models.SeverityMedium)
+	// The absence of a capability is inferred from its non-observation, never
+	// directly confirmed; confidence reflects that epistemic gap.
+	m.DefaultConfidence = models.ConfidenceNotObserved
+	return m
 }
 
 func (r *missingTamper) Run(_ context.Context, envAny any, sink *rules.Sink) error {
