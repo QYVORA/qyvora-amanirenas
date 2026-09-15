@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=AMANIRENAS
+GenericName=iOS and Mobile Security Assessment Framework
+Comment=Authorized iOS/mobile application security assessment, static analysis, and evidence-driven reporting
+Exec=@PREFIX@/bin/amanirenas
+Icon=@PREFIX@/share/icons/hicolor/512x512/apps/amanirenas.png
+Terminal=true
+Categories=Development;Security;Utility;
+Keywords=ios;mobile;ipa;security;assessment;analysis;static;audit;
