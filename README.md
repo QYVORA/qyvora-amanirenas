@@ -51,7 +51,7 @@ builds once the first verifiable release exists.
 Full assessment, no input required, deterministic:
 
 ```sh
-amanirenas assess --sim       # 14 findings, risk 56/100 (medium)
+amanirenas assess --sim       # 14 findings, risk 100/100 (critical)
 ```
 
 Generate a sample app profile and assess it:

@@ -64,10 +64,9 @@ func Build() Document {
 		EventVerbs: []string{
 			events.ScanStarted, events.ScanCompleted, events.StageStarted,
 			events.StageCompleted, events.FindingDiscovered,
-			events.EvidenceCollected, events.AppIdentified,
-			events.IPATaken, events.MetadataExtracted,
+			events.AppIdentified, events.IPATaken, events.MetadataExtracted,
 			events.StaticAnalyzed, events.ConfigAnalyzed,
-			events.APIAnalyzed, events.RuntimeAssessed,
+			events.APIAnalyzed,
 			events.EvidenceCollection, events.RiskCalculated, events.ReportGenerated,
 		},
 		SeverityLevels: []string{
