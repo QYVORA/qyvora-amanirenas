@@ -8,6 +8,7 @@ import (
 	pexit "github.com/QYVORA/qyvora-amanirenas/internal/errors"
 	"github.com/spf13/cobra"
 
+	"github.com/QYVORA/qyvora-amanirenas/internal/capabilities"
 	"github.com/QYVORA/qyvora-amanirenas/internal/version"
 	"github.com/QYVORA/qyvora-tui"
 )
@@ -51,11 +52,20 @@ func runTUI(root *cobra.Command, ctx context.Context) error {
 		Meta:     tuiCommands(root),
 	}
 
+	// The capability registry is the tool's own contract document, read through
+	// the same normaliser the machine contract uses, so the F1 view and the
+	// `capabilities -o json` output cannot disagree.
+	caps, err := tui.CapabilitiesFrom("amanirenas", capabilities.Build())
+	if err != nil {
+		return pexit.NewExitError(1, "preparing the capability registry: "+err.Error())
+	}
+
 	code, err := tui.Run(tui.Config{
-		Title:   "QYVORA / AMANIRENAS",
-		Version: version.String(),
-		Runner:  runner,
-		Out:     os.Stdout,
+		Title:        "QYVORA / AMANIRENAS",
+		Version:      version.String(),
+		Runner:       runner,
+		Out:          os.Stdout,
+		Capabilities: caps,
 	})
 	if err != nil {
 		if tui.IsNotInteractive(err) {
