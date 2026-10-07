@@ -21,16 +21,17 @@ const (
 
 // OperationMetadata describes one operation's safety contract.
 type OperationMetadata struct {
-	ID           string           `json:"id"`
-	Name         string           `json:"name"`
-	Description  string           `json:"description"`
-	Class        Class            `json:"class"`
-	Risk         models.RiskLevel `json:"risk"`
-	TargetType   string           `json:"target_type"`
-	AuthRequired bool             `json:"authorization_required"`
-	Confirm      bool             `json:"confirmation_required"`
-	ChangesState bool             `json:"changes_state"`
-	Reversible   bool             `json:"reversible"`
+	ID           string              `json:"id"`
+	Name         string              `json:"name"`
+	Description  string              `json:"description"`
+	Class        Class               `json:"class"`
+	Risk         models.RiskLevel    `json:"risk"`
+	NoiseLevel   models.NoiseLevel   `json:"noise_level"`
+	TargetType   string              `json:"target_type"`
+	AuthRequired bool                `json:"authorization_required"`
+	Confirm      bool                `json:"confirmation_required"`
+	ChangesState bool                `json:"changes_state"`
+	Reversible   bool                `json:"reversible"`
 }
 
 // Known operations.
@@ -39,21 +40,21 @@ var (
 	OpProfileParse = OperationMetadata{
 		ID: "amanirenas.profile.parse", Name: "app profile snapshot analysis",
 		Description: "Parse and analyze an offline app/profile snapshot file.",
-		Class:       ClassDiscovery, Risk: models.RiskS1, TargetType: "profile",
+		Class:       ClassDiscovery, Risk: models.RiskS1, NoiseLevel: models.NoiseLevelPassive, TargetType: "profile",
 		AuthRequired: false, Confirm: false, ChangesState: false, Reversible: true,
 	}
 	// OpAnalyze runs the analysis pipeline; it never executes app code.
 	OpAnalyze = OperationMetadata{
 		ID: "amanirenas.analyze", Name: "mobile application analysis",
 		Description: "Run metadata, static, configuration and API analysis over the profile.",
-		Class:       ClassAnalysis, Risk: models.RiskS1, TargetType: "any",
+		Class:       ClassAnalysis, Risk: models.RiskS1, NoiseLevel: models.NoiseLevelPassive, TargetType: "any",
 		AuthRequired: false, Confirm: false, ChangesState: false, Reversible: true,
 	}
 	// OpLiveDevice would attach to a physical device. Not implemented.
 	OpLiveDevice = OperationMetadata{
 		ID: "amanirenas.live.device", Name: "live device acquisition",
 		Description: "Acquire runtime state from a physical iOS device (NOT IMPLEMENTED).",
-		Class:       ClassLiveDevice, Risk: models.RiskS2, TargetType: "device",
+		Class:       ClassLiveDevice, Risk: models.RiskS2, NoiseLevel: models.NoiseLevelModerate, TargetType: "device",
 		AuthRequired: true, Confirm: true, ChangesState: false, Reversible: true,
 	}
 )
