@@ -63,6 +63,7 @@ func runTUI(root *cobra.Command, ctx context.Context) error {
 	code, err := tui.Run(tui.Config{
 		Title:        "QYVORA / AMANIRENAS",
 		Version:      version.String(),
+		Banner:       tui.ToolBanner("AMANIRENAS", "Offline mobile app security assessment framework"),
 		Runner:       runner,
 		Out:          os.Stdout,
 		Capabilities: caps,
