@@ -32,4 +32,4 @@ _No report-tier modules._
 | `amanirenas sources` | list supported mobile sources and their status |
 | `amanirenas target` | manage assessment targets (profile files and simulation) |
 | `amanirenas tui` | start the interactive terminal application |
-
+| `docs script <file>` | Run a `.qs` script with the shared scripting engine (`run`/`build` subcommands) |
