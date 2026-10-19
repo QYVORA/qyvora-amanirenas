@@ -20,6 +20,7 @@ import (
 	"github.com/spf13/viper"
 
 	"github.com/QYVORA/qyvora-amanirenas/internal/analysis"
+	"github.com/QYVORA/qyvora-amanirenas/internal/banner"
 	"github.com/QYVORA/qyvora-amanirenas/internal/capabilities"
 	"github.com/QYVORA/qyvora-amanirenas/internal/config"
 	pexit "github.com/QYVORA/qyvora-amanirenas/internal/errors"
@@ -175,7 +176,7 @@ func (a *App) rootCommand() *cobra.Command {
 	root := &cobra.Command{
 		Use:           "amanirenas",
 		Short:         "QYVORA iOS and mobile security assessment framework",
-		Long:          "amanirenas analyzes offline app profiles and IPA snapshots for metadata, static, configuration, API and secrets risk. Runtime assessment and live device acquisition are not implemented and are refused honestly; nothing here executes app code.",
+		Long:          banner.Render() + "\n\n  " + banner.Tagline + " — " + version.CompanyName + "\n  " + version.CompanyURL + "\n  Built in " + version.CompanyCity + "\n\n" + "amanirenas analyzes offline app profiles and IPA snapshots for metadata, static, configuration, API and secrets risk. Runtime assessment and live device acquisition are not implemented and are refused honestly; nothing here executes app code.",
 		Version:       version.Version,
 		SilenceUsage:  true,
 		SilenceErrors: true,
@@ -199,7 +200,7 @@ func (a *App) rootCommand() *cobra.Command {
 	pf.StringVarP(&format, "output", "o", "", "output format: terminal, json, yaml, markdown, html")
 	pf.BoolVar(&noColor, "no-color", false, "disable ANSI color (NO_COLOR is also honored)")
 	pf.BoolVarP(&quiet, "quiet", "q", false, "suppress informational terminal output")
-	pf.StringVar(&eventsFlag, "events", "stderr", "JSONL event stream: stdout, stderr (default), off, or a file path")
+	pf.StringVar(&eventsFlag, "events", "stderr", "JSONL event stream: stdout, stderr, off, or a file path")
 	pf.BoolVar(&allowShellOut, "allow-shellout", false, "allow scripts to use exec/run.cmd shell-out (also via QYVORA_ALLOW_SHELLOUT=1)")
 	_ = quiet
 
