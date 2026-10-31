@@ -176,7 +176,7 @@ func (a *App) rootCommand() *cobra.Command {
 	root := &cobra.Command{
 		Use:           "amanirenas",
 		Short:         "QYVORA iOS and mobile security assessment framework",
-		Long:          banner.Render() + "\n\n  " + banner.Tagline + " — " + version.CompanyName + "\n  " + version.CompanyURL + "\n  Built in " + version.CompanyCity + "\n\n" + "amanirenas analyzes offline app profiles and IPA snapshots for metadata, static, configuration, API and secrets risk. Runtime assessment and live device acquisition are not implemented and are refused honestly; nothing here executes app code.",
+		Long:          banner.Render() + "\n\n  " + banner.Tagline + " — " + version.CompanyName + "\n  " + version.CompanyURL + "\n  Built in " + version.CompanyCity + "\n\n" + "amanirenas analyzes offline app profiles and IPA snapshots for metadata, static, configuration, API and secrets risk. Runtime assessment and live device acquisition are not implemented and are refused honestly; nothing here executes app code." + "\n\nCommands follow the shared tier grammar\namanirenas <tier> <module> [<action>] [target] [flags], where the tier is one of\nrecon, exploit, or report. Run it with no arguments to print this help;\nassessment is one-shot.",
 		Version:       version.Version,
 		SilenceUsage:  true,
 		SilenceErrors: true,
