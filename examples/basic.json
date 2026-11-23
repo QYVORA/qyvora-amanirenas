@@ -1,0 +1,14 @@
+{
+  "schema": "qyvora.amanirenas.app.v1",
+  "app_id": "APP-EXAMPLE-001",
+  "name": "Example App",
+  "source": "ipa",
+  "bundle_id": "com.example.app",
+  "version": "1.0",
+  "entries": [
+    {
+      "path": "Payload/Example.app/Info.plist",
+      "size": 1024
+    }
+  ]
+}

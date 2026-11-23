@@ -1,7 +1,7 @@
 # Amanirenas
 
 > **Offline mobile app security assessment framework.**
-> A terminal-first console and CLI for app profile / IPA snapshot analysis:
+> A one-shot CLI for app profile / IPA snapshot analysis:
 > metadata, static posture, configuration, API and secrets risk — with no
 > runtime execution.
 
@@ -10,15 +10,14 @@
 ## Overview
 
 Amanirenas is QYVORA's mobile application security assessment framework
-for **offline app profiles and IPA snapshots**. It runs as a shared
-terminal-first console **and** a one-shot CLI with identical commands, is
+for **offline app profiles and IPA snapshots**. It runs as a one-shot CLI, is
 deterministic and offline-first with `--sim`, and produces evidence-backed
 findings with transparent risk scoring. Runtime assessment and live
 device acquisition are **not implemented and are refused honestly**;
 nothing here executes app code.
 
-- **One workflow, two surfaces** — the console commands equal the CLI
-  commands.
+- **One workflow, one surface** — every assessment runs through the one-shot
+  CLI.
 - **Deterministic `--sim`** — fixed dataset exercises every rule, no device
   or Xcode required, CI-ready.
 - **Offline only** — analyzes only the app profiles / snapshots you
@@ -61,15 +60,10 @@ amanirenas profile --sim
 amanirenas assess profile.sim.json
 ```
 
-Interactive console (REPL on a real terminal; stdin piping uses a plain line reader):
-
-```sh
-amanirenas
-assess --sim
-findings
-evidence
-exit
-```
+The interactive console is retired and unavailable in this release. The
+per-tool TUI is excluded from builds (`//go:build ignore`) pending the redirect
+of qyvora-tui to the future AI orchestration layer; a bare invocation prints
+CLI usage. Use the one-shot commands above.
 
 Machine-readable output:
 
@@ -84,7 +78,6 @@ amanirenas report -o json
 ```
 assess        run the analysis pipeline against an app profile or simulation
 capabilities  print the machine-readable capability contract
-console       start the interactive assessment console
 evidence      inspect the latest assessment evidence
 findings      inspect the latest assessment findings
 profile       generate a deterministic sample app profile
