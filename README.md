@@ -155,3 +155,16 @@ Website: https://qyvora.org · Security/Support: qyvorasec@gmail.com
 
 **Authorized use only.** Analyze app profiles you are authorized to
 evaluate; no code is executed and live devices are never acquired.
+
+## CI pre-push checks
+
+Run these from the repository root before pushing (they mirror `.github/workflows/ci.yml`):
+
+```sh
+test -z "$(gofmt -l .)"
+go vet ./...
+go test ./...
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build ./...
+```
+
+CI needs the repository secret `QYVORA_CI_TOKEN` (fine-grained PAT or GitHub App token with read access to the private QYVORA Go module repositories). Without it the private-module preflight step fails with an explicit message.
