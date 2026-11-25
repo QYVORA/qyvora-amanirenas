@@ -21,7 +21,7 @@ import (
 // finding.
 func TestSimulationPipelineProducesFindings(t *testing.T) {
 	reg := rules.NewRegistry()
-	reg.RegisterAll(builtin.All()...)
+	_ = reg.RegisterAll(builtin.All()...)
 
 	var evBuf bytes.Buffer
 	stream := events.NewStream(&evBuf)
@@ -79,7 +79,7 @@ func TestSimulationPipelineProducesFindings(t *testing.T) {
 // raw snapshot document.
 func TestSnapshotPipelineAcceptsFileTarget(t *testing.T) {
 	reg := rules.NewRegistry()
-	reg.RegisterAll(builtin.All()...)
+	_ = reg.RegisterAll(builtin.All()...)
 
 	doc := `{"schema":"qyvora.amanirenas.app.v1","app_id":"com.demo.app","name":"Demo","source":"ipa","bundle_id":"com.demo.app",
 	  "artifacts":[{"id":"art-1","kind":"hardcoded_secret","file":"Config.swift","detail":"token (redacted)","fingerprint":"sha256:aa"}]}`
