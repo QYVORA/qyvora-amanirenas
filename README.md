@@ -7,6 +7,10 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+## Readiness
+
+**BETA.** Amanirenas analyzes offline mobile profiles and IPA snapshots; live device assessment is not implemented and is refused. Implementation exists for exploration/testing but has not received final production-readiness approval. Its owner classification is `BETA` in the [Product Registry](../../../../knowledge/qyvora-docs/07-products/PRODUCT-REGISTRY.md); shipped implementation and tags do not promote it to `AVAILABLE`.
+
 ## Overview
 
 Amanirenas is QYVORA's mobile application security assessment framework
